@@ -7,17 +7,18 @@
   ],
   "exclude_paths": [
     "/Users/yourusername/Downloads",
+    "/Users/yourusername/Dropbox",
     "/Users/yourusername/Library/Caches",
     "/Users/yourusername/.Trash",
     "/Users/yourusername/.npm",
     "/Users/yourusername/.yarn",
     "**/.DS_Store",
     "**/node_modules",
-    "**/.git",
-    "**/*.tmp",
-    "**/*.temp",
     "**/Thumbs.db",
-    "**/.localized"
+    "**/.localized",
+    "**/.fseventsd",
+    "**/.Spotlight-V100",
+    "**/.Trashes"
   ],
   "destination_drive_mount_point": "/Volumes/BackupDrive",
   "detailed_logging": false
