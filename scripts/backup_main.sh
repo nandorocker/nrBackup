@@ -84,7 +84,7 @@ build_rsync_command() {
     local rsync_cmd="nice -n 10 rsync"
     
     # Basic rsync options
-    rsync_cmd+=" -aHX"  # Archive mode, hard links, extended attributes
+    rsync_cmd+=" -aH"  # Archive mode, hard links (removed -X as it's not supported by macOS rsync)
     rsync_cmd+=" --delete"  # Delete files in destination that don't exist in source
     rsync_cmd+=" --delete-excluded"  # Delete excluded files from destination
     
