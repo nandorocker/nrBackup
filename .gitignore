@@ -88,3 +88,4 @@ Icon?
 # Custom exclusions for this project
 test_backups/
 sample_config.json.bak
+config.json
