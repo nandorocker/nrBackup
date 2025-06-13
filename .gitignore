@@ -61,6 +61,14 @@ coverage/
 .nyc_output/
 test-results/
 *.test.log
+test/bats/bin/
+test/bats/lib/
+test/bats/libexec/
+test/bats/target/
+test/bats/tmp/
+tests/tmp/
+tests/scripts/tmp
+test_config/logs/
 
 # Node.js related (if any Node dependencies are added)
 node_modules/
