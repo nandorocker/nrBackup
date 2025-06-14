@@ -1,0 +1,6 @@
+#!/bin/bash
+# Mock terminal-notifier for testing
+# Log all arguments passed to terminal-notifier
+mkdir -p "$(dirname "${TEST_LOG_DIR:-/tmp}/notifications.log")" 2>/dev/null || true
+echo "Mock notification: $*" >> "${TEST_LOG_DIR:-/tmp}/notifications.log"
+exit 0

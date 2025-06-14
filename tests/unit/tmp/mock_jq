@@ -1,0 +1,70 @@
+#!/bin/bash
+# Mock jq for testing
+if [[ $# -eq 1 && "$1" == "empty" ]]; then
+    # Validate JSON syntax - always succeed for our test configs
+    exit 0
+elif [[ "$1" == "-r" ]]; then
+    case "$2" in
+        ".schedule_type // \"interval\"")
+            echo "interval"
+            ;;
+        ".interval_hours // 6")
+            echo "6"
+            ;;
+        ".daily_backup_time // \"02:00\"")
+            echo "02:00"
+            ;;
+        ".destination_drive_mount_point // \"/Volumes/BackupDrive\"")
+            echo "/Volumes/TestBackup"
+            ;;
+        ".detailed_logging // false")
+            echo "false"
+            ;;
+        *)
+            # Default fallback for any other queries
+            echo ""
+            ;;
+    esac
+elif [[ "$1" =~ ^\..*\|.*length$ ]]; then
+    case "$1" in
+        ".source_paths | length")
+            echo "1"
+            ;;
+        ".exclude_paths | length")
+            echo "3"
+            ;;
+        *)
+            echo "0"
+            ;;
+    esac
+elif [[ "$1" == "-r" ]] && [[ "$2" =~ \..*\[[0-9]+\] ]]; then
+    case "$2" in
+        ".source_paths[0]")
+            echo "/Users/testuser"
+            ;;
+        ".exclude_paths[0]")
+            echo "Downloads"
+            ;;
+        ".exclude_paths[1]")
+            echo ".Trash"
+            ;;
+        ".exclude_paths[2]")
+            echo "**/.DS_Store"
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+else
+    # For any other case, try to parse the actual file if it exists
+    if [[ -f "$3" ]]; then
+        # Use real jq if available, otherwise provide default
+        if command -v /usr/bin/jq >/dev/null 2>&1; then
+            /usr/bin/jq "$@"
+        else
+            echo ""
+        fi
+    else
+        echo ""
+    fi
+fi

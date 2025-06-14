@@ -77,6 +77,38 @@ After setup, nrBackup runs automatically according to your schedule. You can als
 
 Backup logs are stored in `~/Library/Logs/nrBackup/` with timestamps.
 
+## Development
+
+### Project Structure
+
+This project is organized into clear directories:
+
+- `scripts/` - Core application scripts
+- `docs/` - All project documentation
+- `tests/` - Complete testing framework
+  - `unit/` - Unit tests using BATS
+  - `integration/` - Integration and system tests
+  - `config/` - Test configurations
+  - `framework/` - Testing framework installation
+  - `docs/` - Test documentation and results
+
+For detailed structure information, see `docs/PROJECT_STRUCTURE.md`.
+
+### Running Tests
+
+To run the test suite:
+
+```bash
+# Run all tests
+./tests/test_runner.sh
+
+# Run specific test file
+./tests/test_runner.sh tests/unit/hello_world.bats
+
+# Run integration tests
+./tests/integration/auto_test_backup.sh
+```
+
 ## Uninstalling
 
 To remove nrBackup:

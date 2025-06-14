@@ -1,0 +1,14 @@
+#!/bin/bash
+# Mock rsync for testing
+echo "Mock rsync executed with args: $*" > "$TEST_LOG_DIR/rsync.log"
+
+# Simulate rsync stats output
+cat << 'RSYNC_STATS'
+Number of files: 1000
+Number of created files: 50
+Number of deleted files: 5
+Total file size: 1,048,576 bytes
+Total transferred file size: 52,428 bytes
+RSYNC_STATS
+
+exit 0
