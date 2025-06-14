@@ -73,10 +73,14 @@ The configuration file is located at `~/Library/Application Support/nrBackup/con
 
 ## Usage
 
-After setup, nrBackup runs automatically according to your schedule. You can also run manual backups:
+After setup, nrBackup runs automatically according to your schedule. You can also run manual backups and manage the system using the utility script:
 
 ```bash
+# Run a manual backup
 ~/Library/Application\ Support/nrBackup/scripts/backup_main.sh
+
+# Or use the utility script for a test backup
+~/Library/Application\ Support/nrBackup/scripts/nrbackup-util.sh test
 ```
 
 ## Logs
@@ -115,12 +119,49 @@ To run the test suite:
 ./tests/integration/auto_test_backup.sh
 ```
 
-## Uninstalling
+## Management
 
-To remove nrBackup:
+Use the nrBackup utility script to manage your installation:
 
 ```bash
-# Unload the launchd agent
+# Show system status
+~/Library/Application\ Support/nrBackup/scripts/nrbackup-util.sh status
+
+# Start/stop the backup service
+~/Library/Application\ Support/nrBackup/scripts/nrbackup-util.sh start
+~/Library/Application\ Support/nrBackup/scripts/nrbackup-util.sh stop
+~/Library/Application\ Support/nrBackup/scripts/nrbackup-util.sh restart
+
+# View configuration and logs
+~/Library/Application\ Support/nrBackup/scripts/nrbackup-util.sh config
+~/Library/Application\ Support/nrBackup/scripts/nrbackup-util.sh logs
+
+# Run a test backup
+~/Library/Application\ Support/nrBackup/scripts/nrbackup-util.sh test
+```
+
+## Uninstalling
+
+nrBackup provides multiple ways to uninstall:
+
+### Option 1: Using the utility script (recommended)
+```bash
+~/Library/Application\ Support/nrBackup/scripts/nrbackup-util.sh uninstall
+```
+
+### Option 2: Using the standalone uninstall script
+```bash
+./uninstall.sh
+```
+
+For automated uninstallation (skip confirmation):
+```bash
+./uninstall.sh --force
+```
+
+### Option 3: Manual removal
+```bash
+# Stop the service
 launchctl unload ~/Library/LaunchAgents/com.nrbackup.agent.plist
 
 # Remove files
@@ -128,6 +169,8 @@ rm -rf ~/Library/Application\ Support/nrBackup
 rm -rf ~/Library/Logs/nrBackup
 rm ~/Library/LaunchAgents/com.nrbackup.agent.plist
 ```
+
+**Note:** Uninstalling nrBackup will not delete your backup files. Those remain safely in your backup destination.
 
 ## License
 
