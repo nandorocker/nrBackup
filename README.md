@@ -31,6 +31,12 @@ brew install jq terminal-notifier
    ```bash
    ./setup.sh
    ```
+   
+   For detailed installation messages, use:
+   ```bash
+   ./setup.sh --debug
+   ```
+   
 3. Follow the prompts to configure your backup settings
 
 ## Configuration
