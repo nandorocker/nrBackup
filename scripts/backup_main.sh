@@ -199,5 +199,7 @@ main() {
     fi
 }
 
-# Run main function
-main "$@"
+# Run main function if not in test mode
+if [[ "${BATS_TEST_DIRNAME:-}" == "" ]]; then
+    main "$@"
+fi

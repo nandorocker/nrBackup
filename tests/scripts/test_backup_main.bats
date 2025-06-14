@@ -6,8 +6,8 @@ load '../test_helper.bash'
     # Create test config and directories
     local test_config="$TEST_CONFIG_DIR/config.json"
     create_test_config "$test_config"
-    mkdir -p "/Volumes/TestBackup"
-    mkdir -p "/Users/testuser"
+    mkdir -p "$TEST_BACKUP_DIR/TestBackup"
+    mkdir -p "$TEST_TEMP_DIR/testuser"
     
     # Set up environment variables
     export APP_SUPPORT_DIR="$TEST_CONFIG_DIR"
@@ -18,7 +18,15 @@ load '../test_helper.bash'
     # Source the backup main script (but don't run main function)
     source "$PROJECT_ROOT/scripts/backup_main.sh"
     
-    # Test validate_environment function
+    # Set required variables and parse config
+    COMPUTER_NAME=$(hostname -s)
+    parse_config "$CONFIG_FILE"
+    
+    # Test validate_environment function - should succeed with proper setup
+    # Check the destination exists
+    [[ -d "$DESTINATION_DRIVE" ]]
+    
+    # Run the actual validation
     run validate_environment
     assert_success
 }
@@ -45,8 +53,8 @@ load '../test_helper.bash'
     # Create test environment
     local test_config="$TEST_CONFIG_DIR/config.json"
     create_test_config "$test_config"
-    mkdir -p "/Volumes/TestBackup"
-    mkdir -p "/Users/testuser"
+    mkdir -p "$TEST_BACKUP_DIR/TestBackup"
+    mkdir -p "$TEST_TEMP_DIR/testuser"
     
     export APP_SUPPORT_DIR="$TEST_CONFIG_DIR"
     export CONFIG_FILE="$test_config"
@@ -55,9 +63,9 @@ load '../test_helper.bash'
     
     source "$PROJECT_ROOT/scripts/backup_main.sh"
     
-    # Initialize required variables
-    initialize_backup
-    validate_environment
+    # Set required variables and parse config
+    COMPUTER_NAME=$(hostname -s)
+    parse_config "$CONFIG_FILE"
     
     # Test rsync command generation
     run build_rsync_command
@@ -65,16 +73,16 @@ load '../test_helper.bash'
     assert_output --partial "rsync -aH"
     assert_output --partial "--delete"
     assert_output --partial "--exclude='Downloads'"
-    assert_output --partial "/Users/testuser/"
-    assert_output --partial "/Volumes/TestBackup/Backups/"
+    assert_output --partial "$TEST_TEMP_DIR/testuser/"
+    assert_output --partial "$TEST_BACKUP_DIR/TestBackup/Backups/"
 }
 
 @test "backup_main: performs backup with mocked rsync" {
     # Create test environment
     local test_config="$TEST_CONFIG_DIR/config.json"
     create_test_config "$test_config"
-    mkdir -p "/Volumes/TestBackup/Backups/$(hostname -s)"
-    mkdir -p "/Users/testuser"
+    mkdir -p "$TEST_BACKUP_DIR/TestBackup/Backups/$(hostname -s)"
+    mkdir -p "$TEST_TEMP_DIR/testuser"
     
     export APP_SUPPORT_DIR="$TEST_CONFIG_DIR"
     export CONFIG_FILE="$test_config"
@@ -83,9 +91,12 @@ load '../test_helper.bash'
     
     source "$PROJECT_ROOT/scripts/backup_main.sh"
     
-    # Initialize and validate
-    initialize_backup
-    validate_environment
+    # Set required variables and parse config
+    COMPUTER_NAME=$(hostname -s)
+    parse_config "$CONFIG_FILE"
+    
+    # Set destination path that would be set by validate_environment
+    DESTINATION_PATH="$DESTINATION_DRIVE/Backups/$COMPUTER_NAME"
     
     # Test backup execution
     run perform_backup
@@ -105,10 +116,10 @@ load '../test_helper.bash'
     
     source "$PROJECT_ROOT/scripts/backup_main.sh"
     
-    initialize_backup
+    # Set required variables
+    COMPUTER_NAME=$(hostname -s)
     
     # Should fail when config file doesn't exist
     run validate_environment
     assert_failure
-}
 }
